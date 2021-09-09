@@ -20,14 +20,14 @@ To use this library you need to ensure you match up with the correct version of 
 
 | FB SDK    | lib version                           | Required React Native Version |
 | --------- | ------------------------------------- | ----------------------------- |
-| >= 9.3.0+ | `react-native-fbsdk-next` `> 4.3.0`   | `>=0.63.3`                    |
+| >= 9.3.0+ | `react-native-fbsdk-next` `> 4.3.0`   | `>=0.63.3`*                   |
 | >= 9.0.0+ | `react-native-fbsdk-next` `>= 3.0.1`  | `>= 0.60`                     |
 | <= 8.0.1  | `react-native-fbsdk` `>= 1.0.0`       | `>= 0.60`                     |
 | <= 8.0.1  | `react-native-fbsdk` `<= 0.10`        | `<= 0.59.x`                   |
 
-> ⚠️ Attention
+> ⚠️ * Attention
 > 
-> Please notice that this module in versions after 4.2.0 only supports React Native versions above 0.63.3 as it's the oldest version of React Native which support latest XCode version. In case you need to use latest version of FB SDK, please consider solution from [this comment](https://github.com/facebook/react-native/issues/29633#issuecomment-694187116).
+> Please notice that this module in versions after 4.2.0 only supports React Native versions above 0.63.3 as it's the oldest version of React Native which support latest XCode version. Technically, it may work on older versions (test it to be sure) but **they are not supported**. Changes that accidentally break older react-native versions may be issued without regard to semantic versioning constraints because we do not test against the older versions. Please see [this issue](https://github.com/thebergamo/react-native-fbsdk-next/issues/30) for an example of a previous break. Please update to current react-native versions.
 
 ### 1. Install the library
 
@@ -183,14 +183,32 @@ Undefined symbols for architecture x86_64:
     (maybe you meant: _swift_FORCE_LOAD$swiftWebKit$_FBSDKLoginKit, _swift_FORCE_LOAD$swiftWebKit$_FBSDKShareKit , _swift_FORCE_LOAD$swiftWebKit$_FBSDKCoreKit )
     ld: symbol(s) not found for architecture x86_64
 ```
-   
-   After **facebook-ios-sdk v7** you need to create a swift file like so ([File.Swift](https://github.com/thebergamo/react-native-fbsdk-next/blob/master/example/ios/RNFBSDKExample/File.swift)) in the main project folder. When you add an empty swift file, XCode will ask you if you want to "Create Bridging Header".
 
-   It will include to the Header Search Path on your build settings:
+   After **facebook-ios-sdk v7** (written with Swift parts) you need to coordinate Swift language usage with Objective-C for iOS.
+
+   Either:
+
+- add a new file named `File.Swift` in the main project folder and answer "yes" when Xcode asks you if you want to "Create Bridging Header" 
+The empty swift file makes this change to the Header Search Path on your build settings:
 ```
 $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)
 $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)
 ```
+
+- or add this stanza in the postinstall section of your Podfile as a possible workaround (then `pod deintegrate && pod install`):
+
+   ```ruby
+    # Mixing Swift and Objective-C in a react-native project may be problematic.
+    # Workaround:  https://github.com/facebookarchive/react-native-fbsdk/issues/755#issuecomment-787488994
+    installer.aggregate_targets.first.user_project.native_targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['LIBRARY_SEARCH_PATHS'] = ['$(inherited)', '$(SDKROOT)/usr/lib/swift']
+      end
+    end
+   ```
+
+  Both result in fixing search paths.
+  
 
 ## Usage
 
