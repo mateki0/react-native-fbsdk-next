@@ -9,22 +9,22 @@ Pod::Spec.new do |s|
   s.author        = { 'thebergamo' => 'marcos@thedon.com.br' }
   s.license       = package['license']
   s.homepage      = package['homepage']
-  s.source        = { :git => 'https://github.com/thebergamo/react-native-fbsdk-next.git', :tag => "v#{package['version']}" }
+  s.source        = { :git => 'https://github.com/danielmark0116/react-native-fbsdk-next.git' }
   s.platforms     = { :ios => "11.0", :tvos => "9.2" }
   s.dependency      'React-Core'
 
   s.subspec 'Core' do |ss|
-    ss.dependency     'FBSDKCoreKit', '~> 11.0.1'
+    ss.dependency     'FBSDKCoreKit', '~> 11.2.0'
     ss.source_files = 'ios/RCTFBSDK/core/*.{h,m}'
   end
 
   s.subspec 'Login' do |ss|
-    ss.dependency     'FBSDKLoginKit', '~> 11.0.1'
+    ss.dependency     'FBSDKLoginKit', '~> 11.2.0'
     ss.source_files = 'ios/RCTFBSDK/login/*.{h,m}'
   end
 
   s.subspec 'Share' do |ss|
-    ss.dependency     'FBSDKShareKit', '~> 11.0.1'
+    ss.dependency     'FBSDKShareKit', '~> 11.2.0'
     ss.source_files = 'ios/RCTFBSDK/share/*.{h,m}'
   end
 end

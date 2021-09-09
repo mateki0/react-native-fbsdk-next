@@ -54,6 +54,7 @@ module.exports = {
   },
   /**
    * Initialize the sdk
+   * Deleted in 11th version but reintroduced in 11.2.0
    */
   initializeSDK() {
     Settings.initializeSDK();
