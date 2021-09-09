@@ -45,7 +45,7 @@ RCT_EXPORT_METHOD(setDataProcessingOptions:(nullable NSStringArray *)options cou
 
 RCT_EXPORT_METHOD(initializeSDK)
 {
-  [FBSDKApplicationDelegate initializeSDK:nil];
+  // [FBSDKApplicationDelegate initializeSDK:nil];
 }
 
 @end
